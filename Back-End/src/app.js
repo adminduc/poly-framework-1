@@ -3,9 +3,11 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import Router from "./routers/index";
 import dotenv from "dotenv";
+import cors from "cors";
 dotenv.config();
 const app = express();
 app.use(express.json());
+app.use(cors());
 // Console log router request to terminal (Morgan)
 app.use(morgan("tiny"));
 
