@@ -1,0 +1,199 @@
+<section id="c-search" class="lg:px-0 px-3 container mx-auto my-6">
+  <div class="grid lg:grid-cols-4 grid-cols-1 lg:gap-8 gap-0">
+    <div class="">
+      <h3 class="font-bold lg:mt-8 mt-4">Tìm kiếm sản phẩm</h3>
+      <div class="flex items-center">
+        <form [formGroup]="formSearch" (ngSubmit)="onHandleSearch()">
+          <input
+            class="border py-2 pl-2 my-3 focus:outline-none mr-2 lg-[240px]"
+            type="text"
+            placeholder="Nhập tên"
+            formControlName="keyword"
+          />
+          <button
+            class="bg-black text-white py-2 px-3 font-medium"
+            type="submit"
+          >
+            Tìm kiếm
+          </button>
+        </form>
+      </div>
+      <label class="font-bold cursor-pointer" for="" (click)="onCloseCategory()"
+        >Danh mục<i
+          class="px-2 fa-solid fa-plus cursor-pointer"
+          (click)="onCloseCategory()"
+        ></i></label
+      ><br />
+      <aside id="close_category">
+        <ng-container *ngIf="listCategory !== undefined">
+          <div>
+            <h5
+              class="cursor-pointer max-md:text-sm"
+              (click)="getAllProducts(0)"
+            >
+              Tất cả sản phẩm
+            </h5>
+          </div>
+          <div *ngFor="let item of listCategory">
+            <h5
+              class="cursor-pointer max-md:text-sm"
+              (click)="actionQueryCategory(item._id)"
+            >
+              {{ item.name }}
+            </h5>
+          </div>
+        </ng-container>
+      </aside>
+
+      <!-- <label class="font-bold" for="">Mức giá</label> <br />
+      <input class="mr-2" type="checkbox" id="" name="" value="" />Dưới 200.000
+      VND <br />
+      <input class="mr-2" type="checkbox" id="" name="" value="" />
+      200.000 VND - 400.000 VND <br />
+      <input class="mr-2" type="checkbox" id="" name="" value="" />
+      400.000 VND - 700.000 VND<br />
+      <input class="mr-2" type="checkbox" id="" name="" value="" />
+      700.000 VND - 1.000.000 VND <br />
+      <input class="mr-2" type="checkbox" id="" name="" value="" />Trên
+      1.000.000 VND <br /> -->
+    </div>
+    <div class="col-span-3">
+      <div class="lg:my-8 my-3 flex justify-between items-center">
+        <h2 class="lg:text-2xl text-xl font-bold">TẤT CẢ SẢN PHẨM</h2>
+        <form action="" class="lg:block hidden">
+          <label class="font-bold" for="">Sắp xếp theo: </label>
+          <select class="focus:outline-none border py-1 px-2" name="" id="">
+            <option value="">Mới nhất</option>
+            <option value="">Cũ nhất</option>
+            <option value="">Giá tăng dần</option>
+            <option value="">Giá giảm dần</option>
+          </select>
+        </form>
+      </div>
+
+      <!-- <app-card></app-card> -->
+      <ng-container *ngIf="products !== undefined && products.length > 0">
+        <app-card-product [products]="products"></app-card-product>
+        <div class="pt-3">
+          <div class="text-center w-full" aria-label="Page navigation example">
+            <ul class="inline-flex items-center -space-x-px">
+              <div>
+                <button
+                  (click)="prevAndNext(apiParams, null, null, 1, null)"
+                  class="px-4 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <i class="fa-solid fa-forward-step fa-rotate-180"></i>
+                </button>
+                <button
+                  (click)="
+                    prevAndNext(
+                      apiParams,
+                      null,
+                      null,
+                      valuePagination.prevPage,
+                      null
+                    )
+                  "
+                  class="px-4 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  PREV
+                </button>
+                <ng-container *ngFor="let item of pageNumberArr; let i = index">
+                  <ng-container *ngIf="item == valuePagination.currentPage">
+                    <button
+                      *ngIf="item !== 1"
+                      (click)="
+                        prevAndNext(apiParams, item - 1, null, null, null)
+                      "
+                      class="px-4 py-2 leading-tight bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white text-gray-700"
+                    >
+                      {{ item - 1 }}
+                    </button>
+                    <button
+                      (click)="prevAndNext(apiParams, item, null, null, null)"
+                      [ngClass]="
+                        item == valuePagination.currentPage
+                          ? 'px-4 py-2 leading-tight bg-black border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white text-white'
+                          : 'px-4 py-2 leading-tight bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white text-gray-700'
+                      "
+                    >
+                      {{ item }}
+                    </button>
+                    <ng-container
+                      *ngIf="item + 1 <= valuePagination.totalPages"
+                    >
+                      <button
+                        (click)="
+                          prevAndNext(apiParams, item + 1, null, null, null)
+                        "
+                        class="px-4 py-2 leading-tight bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white text-gray-700"
+                      >
+                        {{ item + 1 }}
+                      </button>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+
+                <button
+                  (click)="
+                    prevAndNext(
+                      apiParams,
+                      null,
+                      null,
+                      null,
+                      valuePagination.nextPage
+                    )
+                  "
+                  class="px-4 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  NEXT
+                </button>
+                <button
+                  (click)="
+                    prevAndNext(
+                      apiParams,
+                      null,
+                      null,
+                      valuePagination.totalPages,
+                      null
+                    )
+                  "
+                  class="px-4 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  <i class="fa-solid fa-forward-step"></i>
+                </button>
+              </div>
+              <!-- <div *ngIf="nowPage !== null">
+                <button
+                  *ngIf="prevPage !== null"
+                  (click)="onHandlePage(prevPage)"
+                  class="px-4 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  {{ prevPage }}
+                </button>
+                <button
+                  (click)="onHandlePage(nowPage)"
+                  class="px-4 py-2 leading-tight text-gray-500 bg-black border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  {{ nowPage }}
+                </button>
+                <button
+                  *ngIf="nextPage !== null"
+                  (click)="onHandlePage(nextPage)"
+                  class="px-4 py-2 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                >
+                  {{ nextPage }}
+                </button>
+              </div> -->
+            </ul>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="products == undefined">
+        <div class="min-w-full py-5 text-center">
+          <h4 class="font-bold text-xl">Không có sản phẩm nào</h4>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</section>

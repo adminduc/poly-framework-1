@@ -1,0 +1,102 @@
+<div class="lg:w-[450px] md:w-full mx-auto border">
+  <div class="m-5">
+    <p class="text-center bg-[#F3F5F6] py-2">Giỏ hàng</p>
+  </div>
+  <div id="cart-empty" class="svgico-mini-cart my-5 hidden">
+    <svg class="mx-auto" width="70" height="70" viewBox="0 0 81 70">
+      <g
+        transform="translate(0 2)"
+        stroke-width="4"
+        stroke="#1e2d7d"
+        fill="none"
+        fill-rule="evenodd"
+      >
+        <circle stroke-linecap="square" cx="34" cy="60" r="6"></circle>
+        <circle stroke-linecap="square" cx="67" cy="60" r="6"></circle>
+        <path
+          d="M22.9360352 15h54.8070373l-4.3391876 30H30.3387146L19.6676025 0H.99560547"
+        ></path>
+      </g>
+    </svg>
+    <p class="text-center my-5">Hiện chưa có sản phẩm</p>
+  </div>
+  <div class="max-h-[380px] overflow-scroll overflow-x-hidden">
+    <div *ngIf="listCart !== ''">
+      <div class="p-5" *ngFor="let item of listCart">
+        <div class="grid grid-cols-5 gap-3 relative">
+          <div>
+            <img src="{{ item.image[0] }}" alt="" />
+          </div>
+          <div class="col-span-3">
+            <p class="font-bold text-sm mb-1">
+              {{ item.name }}
+            </p>
+            <p class="font-bold text-sm mb-1 text-red-500">
+              {{ formatMoney(item.price) }}
+            </p>
+
+            <div class="w-6 h-6 bg-[#F5F5F5] text-center relative">
+              {{ item.size }}
+              <span class="text-black absolute top-0 right-[-273px]">
+                x {{ item.quantity }}</span
+              >
+            </div>
+          </div>
+          <button
+            class="absolute py-2 px-3 top-[-10px] right-0"
+            (click)="removeCart(item._id)"
+          >
+            <i class="fa-solid fa-xmark text-[18px]"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="listCart == ''" class="w-full py-12 text-center">
+      <i class="fa-solid fa-cart-plus text-5xl my-4"></i>
+      <h4 class="font-semibold text-base">Giỏ hàng rỗng</h4>
+    </div>
+  </div>
+  <!-- <div class="my-5 p-5">
+    <div class="grid grid-cols-5 gap-3 relative">
+      <div>
+        <img
+          src="https://product.hstatic.net/200000307615/product/5__2__71fd137f95c6496b89237d27ba0136bb_master.jpg"
+          alt=""
+        />
+      </div>
+      <div class="col-span-3">
+        <p class="font-bold text-sm mb-1">PRODUCT 1 abcd</p>
+        <p class="font-bold text-sm mb-1">
+          680.000 <span class="underline">đ</span>
+        </p>
+        <div class="w-6 h-6 bg-[#F5F5F5] text-center">2</div>
+      </div>
+      <button class="absolute py-2 px-3 top-[-10px] right-0">
+        <i class="fa-solid fa-xmark text-[18px]"></i>
+      </button>
+    </div>
+  </div> -->
+  <hr />
+
+  <div class="p-5 flex justify-between items-center">
+    <div>Tổng tiền:</div>
+    <div class="text-[#FF0000] font-bold">
+      {{ formatMoney(sumPrice) }}
+    </div>
+  </div>
+  <div class="p-5 flex justify-between items-center">
+    <button class="px-10 py-3 bg-black text-white uppercase">
+      Xem giỏ hàng
+    </button>
+    <span *ngIf="listCart !== undefined">
+      <button
+        *ngIf="listCart.length > 0"
+        class="px-10 py-3 bg-black text-white uppercase"
+        (click)="onHandleCheckout()"
+      >
+        Thanh toán
+      </button>
+    </span>
+  </div>
+  <hr />
+</div>
